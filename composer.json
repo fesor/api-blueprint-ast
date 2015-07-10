@@ -1,0 +1,24 @@
+{
+    "name": "fesor/api-blueprint",
+    "description": "Api Blueprint AST parser",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sergey Protko",
+            "email": "fesors@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {"Fesor\\ApiBlueprint\\": "src/"}
+    },
+    "require": {
+        "erusev/parsedown": "^1.5"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    }
+}
