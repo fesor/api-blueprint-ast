@@ -2,6 +2,8 @@
 
 namespace Fesor\ApiBlueprint\AST;
 
+use Fesor\ApiBlueprint\AST\Value\Metadata;
+
 class Blueprint
 {
     
@@ -21,7 +23,7 @@ class Blueprint
     public $description = '';
 
     /**
-     * @var array
+     * @var Metadata[]
      */
     public $metadata = [];
 

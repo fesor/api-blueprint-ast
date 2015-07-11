@@ -2,6 +2,8 @@
 
 namespace Fesor\ApiBlueprint\AST;
 
+use Fesor\ApiBlueprint\AST\Value\Value;
+
 class Parameter
 {
 
@@ -36,7 +38,7 @@ class Parameter
     public $example;
 
     /**
-     * @var array
+     * @var Value[]
      */
     public $value;
 
