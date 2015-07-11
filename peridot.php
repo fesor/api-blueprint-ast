@@ -2,23 +2,24 @@
 
 use Evenement\EventEmitterInterface;
 use Peridot\Scope\Scope;
-use Fesor\ApiBlueprint\BlueprintParser;
-use Fesor\ApiBlueprint\MarkdownParser;
+use Fesor\ApiBlueprint\Parser;
+use League\CommonMark\Environment;
+use League\CommonMark\DocParser;
 
 class FunctionalScope extends Scope 
 {
     
     private $parser;
 
-    public function __construct(BlueprintParser $parser)
+    public function __construct( $parser)
     {
         $this->parser = $parser;
     }
 
-    public function ASTof($blueprint)
+    public function jsonRepresentationOf($blueprint)
     {
         return Fesor\JsonMatcher\JsonMatcher::create(
-            $this->parser->parse($blueprint)
+            json_encode($this->parser->parse($blueprint))
         );
     }
 }
@@ -27,8 +28,8 @@ return function (EventEmitterInterface $emitter) {
 
     $emitter->on('test.start', function ($test) {
         $test->getScope()->peridotAddChildScope(new FunctionalScope(
-            new BlueprintParser(
-                new MarkdownParser()
+            new Parser(
+                new DocParser(new Environment())
             )
         ));
     });
