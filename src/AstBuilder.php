@@ -32,7 +32,10 @@ class ASTBuilder
      */
     public function visitParagraph(Paragraph $paragraph)
     {
-        
+        if ('' !== $this->root->description) {
+            $this->root->description .= "\n\n";
+        }
+        $this->root->description .= $paragraph->getStringContent();
     }
 
     /**
