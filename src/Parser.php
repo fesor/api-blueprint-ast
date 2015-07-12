@@ -5,8 +5,10 @@ namespace Fesor\ApiBlueprint;
 use Fesor\ApiBlueprint\AST\Blueprint;
 use Fesor\ApiBlueprint\AST\Value\Metadata;
 use League\CommonMark\Block\Element\AbstractBlock;
+use League\CommonMark\Block\Element\Header;
 use League\CommonMark\Block\Element\Paragraph;
 use League\CommonMark\DocParser;
+use League\CommonMark\Environment;
 
 class Parser
 {
@@ -21,6 +23,15 @@ class Parser
     public function __construct(DocParser $markdownParser)
     {
         $this->markdownParser = $markdownParser;
+    }
+    
+    public static function create()
+    {
+        return new static(
+            new DocParser(
+                Environment::createCommonMarkEnvironment()
+            )
+        );
     }
 
     /**
@@ -43,6 +54,9 @@ class Parser
     {
         if ($block instanceof Paragraph) {
             $nodeVisitor->visitParagraph($block);
+        }
+        if ($block instanceof Header) {
+            $nodeVisitor->visitHeader($block);
         }
 
         $children = $block->getChildren();

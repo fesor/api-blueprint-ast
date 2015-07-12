@@ -4,6 +4,7 @@ namespace Fesor\ApiBlueprint;
 
 use Fesor\ApiBlueprint\AST\Blueprint;
 use Fesor\ApiBlueprint\AST\Value\Metadata;
+use League\CommonMark\Block\Element\Header;
 use League\CommonMark\Block\Element\Paragraph;
 
 class ASTBuilder
@@ -31,6 +32,15 @@ class ASTBuilder
      */
     public function visitParagraph(Paragraph $paragraph)
     {
+        
+    }
+
+    /**
+     * @param Header $header
+     */
+    public function visitHeader(Header $header)
+    {
+        $this->root->name = $header->getStringContent();
     }
 
 }
