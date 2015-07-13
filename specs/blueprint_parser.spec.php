@@ -82,9 +82,9 @@ EOT;
         });
 
     });
-    
+
     context('Name and description parsing', function () {
-        
+
         it('Parses blueprint name and description', function () {
 
             $blueprint = <<<EOT
@@ -104,7 +104,7 @@ EOT;
                 }', ['excluding' => ['_version', 'content', 'element']]);
 
         });
-        
+
         it('Correctly handles multi-paragraph description ', function () {
             $blueprint = <<<EOT
 foo
@@ -116,7 +116,7 @@ EOT;
                 ->jsonRepresentationOf($blueprint)
                 ->equal('"foo\n\nbar"', ['at' => 'description']);
         });
-        
+
     });
 
 });

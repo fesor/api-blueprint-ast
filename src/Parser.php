@@ -4,8 +4,11 @@ namespace Fesor\ApiBlueprint;
 
 use Fesor\ApiBlueprint\AST\Blueprint;
 use Fesor\ApiBlueprint\AST\Value\Metadata;
+use Fesor\ApiBlueprint\Markdown\Element\MetadataBlock;
+use Fesor\ApiBlueprint\Markdown\Parser\MetadataBlockParser;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\Header;
+use League\CommonMark\Block\Element\ListBlock;
 use League\CommonMark\Block\Element\Paragraph;
 use League\CommonMark\DocParser;
 use League\CommonMark\Environment;
@@ -27,10 +30,11 @@ class Parser
     
     public static function create()
     {
+        $env = Environment::createCommonMarkEnvironment();
+        $env->addBlockParser(new MetadataBlockParser());
+        
         return new static(
-            new DocParser(
-                Environment::createCommonMarkEnvironment()
-            )
+            new DocParser($env)
         );
     }
 
@@ -40,11 +44,8 @@ class Parser
      */
     public function parse($input)
     {
-        $blueprint = new Blueprint();
-        $document = $this->markdownParser->parse(
-            $this->parseMetadata($input, $blueprint)
-        );
-        $nodeVisitor = new ASTBuilder($blueprint);
+        $document = $this->markdownParser->parse($input);
+        $nodeVisitor = new ASTBuilder();
         $this->traverseMarkdownAST($document, $nodeVisitor);
 
         return $nodeVisitor->getRoot();
@@ -52,11 +53,18 @@ class Parser
 
     protected function traverseMarkdownAST(AbstractBlock $block, ASTBuilder $nodeVisitor)
     {
+//        var_dump(get_class($block));
+        if ($block instanceof MetadataBlock) {
+            $nodeVisitor->visitMetadata($block);
+        }
         if ($block instanceof Paragraph) {
             $nodeVisitor->visitParagraph($block);
         }
         if ($block instanceof Header) {
             $nodeVisitor->visitHeader($block);
+        }
+        if ($block instanceof ListBlock) {
+            $nodeVisitor->visitList($block);
         }
 
         $children = $block->getChildren();
@@ -64,24 +72,5 @@ class Parser
             $this->traverseMarkdownAST($childBlock, $nodeVisitor);
         }
     }
-    
-    private function parseMetadata($input, Blueprint $root)
-    {
-        $lines = preg_split('/\r\n|\n|\r/', $input);
-        $offset = 0;
-        foreach ($lines as $idx => $line) {
-            if ('' === trim($line)) continue;
-            
-            if (false === ($div = mb_strpos($line, ':')) || $div === mb_strlen(trim($line)) - 1) {
-                break;
-            }
 
-            $offset++;
-            $name = trim(substr($line, 0, $div));
-            $value = trim(substr($line, $div + 1));
-            $root->metadata[] = Metadata::create($name, $value);
-        }
-        
-        return implode("\n", array_slice($lines, $offset));
-    }
 }
