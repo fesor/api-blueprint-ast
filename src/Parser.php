@@ -5,6 +5,7 @@ namespace Fesor\ApiBlueprint;
 use Fesor\ApiBlueprint\AST\Blueprint;
 use Fesor\ApiBlueprint\AST\Value\Metadata;
 use Fesor\ApiBlueprint\Markdown\Element\MetadataBlock;
+use Fesor\ApiBlueprint\Markdown\NodeWalker;
 use Fesor\ApiBlueprint\Markdown\Parser\MetadataBlockParser;
 use League\CommonMark\Block\Element\AbstractBlock;
 use League\CommonMark\Block\Element\Header;
@@ -21,11 +22,17 @@ class Parser
     private $markdownParser;
 
     /**
+     * @var NodeWalker
+     */
+    private $nodeWalker;
+
+    /**
      * @param DocParser $markdownParser
      */
-    public function __construct(DocParser $markdownParser)
+    public function __construct(DocParser $markdownParser, NodeWalker $nodeWalker)
     {
         $this->markdownParser = $markdownParser;
+        $this->nodeWalker = $nodeWalker;
     }
     
     public static function create()
@@ -34,7 +41,7 @@ class Parser
         $env->addBlockParser(new MetadataBlockParser());
         
         return new static(
-            new DocParser($env)
+            new DocParser($env), new NodeWalker()
         );
     }
 
@@ -45,32 +52,10 @@ class Parser
     public function parse($input)
     {
         $document = $this->markdownParser->parse($input);
-        $nodeVisitor = new ASTBuilder();
-        $this->traverseMarkdownAST($document, $nodeVisitor);
+        $builder = new ASTBuilder();
+        $this->nodeWalker->walk($document, $builder);
 
-        return $nodeVisitor->getRoot();
-    }
-
-    protected function traverseMarkdownAST(AbstractBlock $block, ASTBuilder $nodeVisitor)
-    {
-//        var_dump(get_class($block));
-        if ($block instanceof MetadataBlock) {
-            $nodeVisitor->visitMetadata($block);
-        }
-        if ($block instanceof Paragraph) {
-            $nodeVisitor->visitParagraph($block);
-        }
-        if ($block instanceof Header) {
-            $nodeVisitor->visitHeader($block);
-        }
-        if ($block instanceof ListBlock) {
-            $nodeVisitor->visitList($block);
-        }
-
-        $children = $block->getChildren();
-        foreach ($children as $childBlock) {
-            $this->traverseMarkdownAST($childBlock, $nodeVisitor);
-        }
+        return $builder->getAST();
     }
 
 }

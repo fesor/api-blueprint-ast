@@ -5,12 +5,14 @@ namespace Fesor\ApiBlueprint;
 use Fesor\ApiBlueprint\AST\Blueprint;
 use Fesor\ApiBlueprint\AST\Value\Metadata;
 use Fesor\ApiBlueprint\Markdown\Element\MetadataBlock;
+use Fesor\ApiBlueprint\Markdown\NodeVisitor;
 use League\CommonMark\Block\Element\AbstractBlock;
+use League\CommonMark\Block\Element\Document;
 use League\CommonMark\Block\Element\Header;
 use League\CommonMark\Block\Element\ListBlock;
 use League\CommonMark\Block\Element\Paragraph;
 
-class ASTBuilder
+class ASTBuilder extends NodeVisitor
 {
     /**
      * @var Blueprint
@@ -31,11 +33,14 @@ class ASTBuilder
     /**
      * @return Blueprint
      */
-    public function getRoot()
+    public function getAST()
+    {
+        return $this->root;
+    }
+
+    public function leaveDocument(Document $node)
     {
         $this->handleContextDescription();
-        
-        return $this->root;
     }
 
     /**
@@ -58,22 +63,9 @@ class ASTBuilder
         }
     }
     
-    /**
-     * @param ListBlock $list
-     */
-    public function visitList(ListBlock $list)
-    {
-        
-    }
-    
     public function visitMetadata(MetadataBlock $metadata)
     {
         $this->root->metadata[] = $metadata->convertToMetadata();
-    }
-    
-    private function canHaveName()
-    {
-        return isset($this->context->name) && '' === $this->context->name && 0 === count($this->passedNodes);
     }
 
     private function handleContextDescription()
@@ -84,4 +76,8 @@ class ASTBuilder
         $this->passedNodes = [];
     }
 
+    private function canHaveName()
+    {
+        return isset($this->context->name) && '' === $this->context->name && 0 === count($this->passedNodes);
+    }
 }
