@@ -3,14 +3,13 @@ Api Blueprint AST
 
 *Work in progress, stay tuned*
 
-Api Blueprint AST parser for PHP
+Api Blueprint markdown to AST parser.
 
 ## Roadmap
 
- - v0.1 - Support 1A4 specification fully
- - v0.2 - Move to 1A7 specification
- - v0.3 - Move to 1A8 specification
- - v1.0 - Move to 1A9 specification
+ - v0.1 - Support 1A7 specification fully
+ - v0.2 - Move to 1A8 specification (MSON parsing)
+ - v0.3 - Move to 1A9 specification
 
 ## Contribution
 
