@@ -1,0 +1,4 @@
+suites:
+    api_blueprint_suite:
+        namespace: Fesor\ApiBlueprint
+        psr4_prefix: Fesor\ApiBlueprint
