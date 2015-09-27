@@ -28,4 +28,17 @@ abstract class Element
      * Element is an asset of API description
      */
     const TYPE_ASSET = 'asset';
+
+    /**
+     * @var string
+     */
+    protected $element = Element::TYPE_CATEGORY;
+
+    /**
+     * @return string
+     */
+    public function elementType()
+    {
+        return $this->element;
+    }
 }
