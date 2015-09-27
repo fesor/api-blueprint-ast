@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: fesor
- * Date: 9/27/15
- * Time: 18:56
- */
+
 namespace Fesor\ApiBlueprint\Processor;
 
 use Fesor\ApiBlueprint\BlueprintBuilder;
@@ -13,7 +8,7 @@ use League\CommonMark\Block\Element\AbstractBlock;
 interface Processor
 {
     /**
-     * Checks is processor supports given markdown node
+     * Checks is processor supports given markdown entity
      *
      * @param AbstractBlock $node
      * @return bool
@@ -21,12 +16,13 @@ interface Processor
     public function supportsMarkdownEntity(AbstractBlock $node);
 
     /**
-     * Processes markdown node
+     * Processes markdown entity
      *
      * @param AbstractBlock $node
+     * @param BlueprintBuilder $builder
      * @return bool
      */
-    public function process(AbstractBlock $node, BlueprintBuilder $blueprint);
+    public function process(AbstractBlock $node, BlueprintBuilder $builder);
 
     /**
      * Returns priority for node processor
