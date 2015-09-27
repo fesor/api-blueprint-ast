@@ -26,4 +26,19 @@ class BlueprintBuilder
         $this->blueprint->addMetadata($name, $value);
     }
 
+    public function addResourceGroup($name = '')
+    {
+
+    }
+
+    public function addResource($name = '', $urlTemplate = '')
+    {
+
+    }
+
+    public function addAction($method, $name = '', $urlTemplate = '')
+    {
+
+    }
+
 }
