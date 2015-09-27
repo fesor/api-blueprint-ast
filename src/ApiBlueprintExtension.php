@@ -28,7 +28,8 @@ class ApiBlueprintExtension extends Extension
     public function getInlineParsers()
     {
         return [
-            new InlineParser\BacktickParser()
+            new InlineParser\BacktickParser(),
+            new InlineParser\NewlineParser()
         ];
     }
 
