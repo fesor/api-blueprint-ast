@@ -8,7 +8,7 @@ use Fesor\ApiBlueprint\Element\Element;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 
-class BuilderContextSpec extends ObjectBehavior
+class ContextStackSpec extends ObjectBehavior
 {
     private $blueprint;
 

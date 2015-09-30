@@ -4,7 +4,7 @@ namespace Fesor\ApiBlueprint;
 
 use Fesor\ApiBlueprint\Element\Element;
 
-class BuilderContext
+class ContextStack
 {
 
     /**
