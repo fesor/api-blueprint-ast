@@ -3,9 +3,12 @@
 namespace Fesor\ApiBlueprint;
 
 use Fesor\ApiBlueprint\Element\Element;
+use Fesor\ApiBlueprint\Exception\ContextStackException;
 
 class ContextStack
 {
+
+    private $root;
 
     /**
      * @var Element
@@ -23,8 +26,8 @@ class ContextStack
      */
     public function __construct(Element $context)
     {
-        $this->context = $context;
-        $this->contextStack = [];
+        $this->root = $context;
+        $this->restoreContextToRootElement();
     }
 
     /**
@@ -57,6 +60,7 @@ class ContextStack
 
     /**
      * @param Element $element
+     * @throws ContextStackException
      */
     public function restoreContextTo(Element $element)
     {
@@ -65,12 +69,13 @@ class ContextStack
         }
 
         if (!$this->context) {
-            throw new \LogicException('Unable to restore context');
+            throw new ContextStackException('Unable to restore context');
         }
     }
 
     /**
      * @param string $elementType
+     * @throws ContextStackException
      */
     public function restoreContextToElementOfType($elementType)
     {
@@ -79,7 +84,7 @@ class ContextStack
         }
 
         if (!$this->context) {
-            throw new \LogicException(
+            throw new ContextStackException(
                 sprintf('Unable to restore context to element of type "%s"', $elementType)
             );
         }
@@ -87,7 +92,7 @@ class ContextStack
 
     public function restoreContextToRootElement()
     {
-        $this->context = reset($this->contextStack);
+        $this->context = $this->root;
         $this->contextStack = [];
     }
 
