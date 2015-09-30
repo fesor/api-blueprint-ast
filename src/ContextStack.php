@@ -85,4 +85,10 @@ class ContextStack
         }
     }
 
+    public function restoreContextToRootElement()
+    {
+        $this->context = reset($this->contextStack);
+        $this->contextStack = [];
+    }
+
 }

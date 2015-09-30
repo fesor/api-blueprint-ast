@@ -59,4 +59,12 @@ class ContextStackSpec extends ObjectBehavior
         $this->getContext()->shouldReturn($this->blueprint);
     }
 
+    function it_restores_context_to_stack_root(Element $category)
+    {
+        $this->pushContext($category);
+
+        $this->restoreContextToRootElement();
+        $this->getContext()->shouldReturn($this->blueprint);
+    }
+
 }
