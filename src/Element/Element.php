@@ -30,15 +30,43 @@ abstract class Element
     const TYPE_ASSET = 'asset';
 
     /**
-     * @var string
+     * @var array[string]string
      */
-    protected $element = Element::TYPE_CATEGORY;
+    protected $attributes;
+
+    /**
+     * Section elements of the blueprint
+     *
+     * @var array
+     */
+    protected $content = [];
+
+    public function getAttribute($name)
+    {
+        return isset($this->attributes[$name]) ?
+            $this->attributes[$name] : null;
+    }
+
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+    }
+
+    public function addContent($element)
+    {
+        $this->content[] = $element;
+    }
+
+    /**
+     * @return array
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 
     /**
      * @return string
      */
-    public function elementType()
-    {
-        return $this->element;
-    }
+    abstract public function getElementType();
 }

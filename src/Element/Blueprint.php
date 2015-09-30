@@ -2,47 +2,27 @@
 
 namespace Fesor\ApiBlueprint\Element;
 
-class Blueprint extends Element
+class Blueprint extends NamedElement
 {
     /**
      * Version of the AST Serialization
      *
      * @var string
      */
-    public $version = '3.0';
+    protected $version = '3.0';
 
     /**
      * Ordered array of API Blueprint metadata
      *
      * @var array
      */
-    public $metadata = [];
+    protected $metadata = [];
 
     /**
-     * Name of the API
-     *
-     * @var string
+     * Default constructor
      */
-    public $name;
-
-    /**
-     * Top-level description of the API in Markdown or HTML
-     *
-     * @var string
-     */
-    public $description;
-
-    /**
-     * Section elements of the blueprint
-     *
-     * @var array
-     */
-    public $content = [];
-
-
     public function __construct()
     {
-        $this->element = self::TYPE_CATEGORY;
     }
 
     /**
@@ -53,5 +33,14 @@ class Blueprint extends Element
     {
         $this->metadata[] = compact('name', 'value');
     }
+
+    /**
+     * @inheritdoc
+     */
+    public function getElementType()
+    {
+        return self::TYPE_CATEGORY;
+    }
+
 
 }
