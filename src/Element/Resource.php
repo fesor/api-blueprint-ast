@@ -16,6 +16,12 @@ class Resource extends NamedElement
     protected $actions;
 
     /**
+     * @var Payload|null
+     */
+    protected $model;
+
+
+    /**
      * Resource constructor.
      * @param string $name
      * @param string $uriTemplate
@@ -24,6 +30,7 @@ class Resource extends NamedElement
     {
         $this->setName($name);
         $this->uriTemplate = $uriTemplate;
+        $this->actions = [];
     }
 
     /**
@@ -53,5 +60,36 @@ class Resource extends NamedElement
     public function addAction(Action $action)
     {
         $this->actions[] = $action;
+
+        return true;
+    }
+
+    public function addPayload(Payload $payload)
+    {
+        if (Payload::MODEL === $payload->getPayloadType()) {
+            $this->model = $payload;
+            $this->model->setName($this->name);
+
+            return true;
+        }
+
+        return $this->addPayloadToLastAction($payload);
+    }
+
+    private function addPayloadToLastAction(Payload $payload)
+    {
+        $lastAction = end($this->actions);
+        if (!$lastAction) {
+            return false;
+        }
+
+        $lastAction->addPayload($payload);
+
+        return true;
+    }
+
+    public function getActions()
+    {
+        return $this->actions;
     }
 }
